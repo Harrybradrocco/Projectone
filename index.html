@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DX Coil Tool - OCR</title>
+    <title>DX Coil Tool - OCR Data Extraction</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2"></script>
 </head>
 <body>
@@ -15,8 +15,32 @@
     <div id="output"></div>
 
     <form>
-        <label>Airflow: <input type="text" name="airflow"></label><br><br>
-        <label>Capacity: <input type="text" name="capacity"></label><br><br>
+        <label>Airflow (CFM): <input type="text" name="airflow"></label><br><br>
+        <label>Pressure drop air, wet coil (in wc): <input type="text" name="pressure_drop_wet"></label><br><br>
+        <label>Pressure drop air, dry coil (in wc): <input type="text" name="pressure_drop_dry"></label><br><br>
+        <label>Air temperature before/after (°F): <input type="text" name="air_temp"></label><br><br>
+        <label>Total cooling capacity (BTU/hr): <input type="text" name="cooling_capacity"></label><br><br>
+        <label>Sensible cooling (%): <input type="text" name="sensible_cooling"></label><br><br>
+        <label>Face velocity (ft/min): <input type="text" name="face_velocity"></label><br><br>
+        <label>Condensate (GPM): <input type="text" name="condensate"></label><br><br>
+        <label>Fluid type: <input type="text" name="fluid_type"></label><br><br>
+        <label>Fluid temp in/out (°F): <input type="text" name="fluid_temp"></label><br><br>
+        <label>Fluid flow rate (GPM): <input type="text" name="fluid_flow_rate"></label><br><br>
+        <label>Fluid pressure drop (psi): <input type="text" name="fluid_pressure_drop"></label><br><br>
+        <label>Fluid velocity (ft/s): <input type="text" name="fluid_velocity"></label><br><br>
+        <label>Coil volume (ft³): <input type="text" name="coil_volume"></label><br><br>
+        <label>Valve size (KvS): <input type="text" name="valve_size"></label><br><br>
+        <label>Connection side: <input type="text" name="connection_side"></label><br><br>
+        <label>Connection size inlet/outlet: <input type="text" name="connection_size"></label><br><br>
+        <label>Tube material: <input type="text" name="tube_material"></label><br><br>
+        <label>Fin material: <input type="text" name="fin_material"></label><br><br>
+        <label>Fin thickness (in): <input type="text" name="fin_thickness"></label><br><br>
+        <label>Fin spacing (FPI): <input type="text" name="fin_spacing"></label><br><br>
+        <label>No. of rows: <input type="text" name="rows"></label><br><br>
+        <label>Drip tray material: <input type="text" name="drip_tray_material"></label><br><br>
+        <label>Pipe diameter from drip tray (in): <input type="text" name="pipe_diameter"></label><br><br>
+        <label>Coil code: <input type="text" name="coil_code"></label><br><br>
+        <label>Water trap (pcs): <input type="text" name="water_trap"></label><br><br>
     </form>
 
     <script>
@@ -45,22 +69,42 @@
                 Tesseract.recognize(imgSrc, 'eng', { logger: m => console.log(m) })
                     .then(({ data: { text } }) => {
                         console.log(text);
-                        document.querySelector('input[name="airflow"]').value = extractAirflow(text);
-                        document.querySelector('input[name="capacity"]').value = extractCapacity(text);
+                        document.querySelector('input[name="airflow"]').value = extractValue(text, "Air flow");
+                        document.querySelector('input[name="pressure_drop_wet"]').value = extractValue(text, "Pressure drop air, wet coil");
+                        document.querySelector('input[name="pressure_drop_dry"]').value = extractValue(text, "Pressure drop air, dry coil");
+                        document.querySelector('input[name="air_temp"]').value = extractValue(text, "Air temperature before/after");
+                        document.querySelector('input[name="cooling_capacity"]').value = extractValue(text, "Total cooling capacity");
+                        document.querySelector('input[name="sensible_cooling"]').value = extractValue(text, "Sensible cooling");
+                        document.querySelector('input[name="face_velocity"]').value = extractValue(text, "Face velocity");
+                        document.querySelector('input[name="condensate"]').value = extractValue(text, "Condensate");
+                        document.querySelector('input[name="fluid_type"]').value = extractValue(text, "Fluid type");
+                        document.querySelector('input[name="fluid_temp"]').value = extractValue(text, "Fluid temperature inlet/outlet");
+                        document.querySelector('input[name="fluid_flow_rate"]').value = extractValue(text, "Fluid flow rate");
+                        document.querySelector('input[name="fluid_pressure_drop"]').value = extractValue(text, "Fluid pressure drop");
+                        document.querySelector('input[name="fluid_velocity"]').value = extractValue(text, "Fluid velocity");
+                        document.querySelector('input[name="coil_volume"]').value = extractValue(text, "Coil volume");
+                        document.querySelector('input[name="valve_size"]').value = extractValue(text, "Recommended valve size");
+                        document.querySelector('input[name="connection_side"]').value = extractValue(text, "Connection side");
+                        document.querySelector('input[name="connection_size"]').value = extractValue(text, "Connection size inlet/outlet");
+                        document.querySelector('input[name="tube_material"]').value = extractValue(text, "Tube material");
+                        document.querySelector('input[name="fin_material"]').value = extractValue(text, "Fin material");
+                        document.querySelector('input[name="fin_thickness"]').value = extractValue(text, "Fin thickness");
+                        document.querySelector('input[name="fin_spacing"]').value = extractValue(text, "Fin spacing");
+                        document.querySelector('input[name="rows"]').value = extractValue(text, "No. of rows");
+                        document.querySelector('input[name="drip_tray_material"]').value = extractValue(text, "Drip tray material");
+                        document.querySelector('input[name="pipe_diameter"]').value = extractValue(text, "Diameter of pipe from drip tray");
+                        document.querySelector('input[name="coil_code"]').value = extractValue(text, "Coil code");
+                        document.querySelector('input[name="water_trap"]').value = extractValue(text, "Water trap");
                     });
             } else {
                 alert('Please upload an image first.');
             }
         });
 
-        function extractAirflow(text) {
-            const airflowMatch = text.match(/Airflow: (\d+)/);
-            return airflowMatch ? airflowMatch[1] : '';
-        }
-
-        function extractCapacity(text) {
-            const capacityMatch = text.match(/Capacity: (\d+)/);
-            return capacityMatch ? capacityMatch[1] : '';
+        function extractValue(text, fieldName) {
+            const regex = new RegExp(`${fieldName}\\s*(.*)`);
+            const match = text.match(regex);
+            return match ? match[1].trim() : '';
         }
     </script>
 </body>
