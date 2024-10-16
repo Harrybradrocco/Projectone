@@ -74,7 +74,7 @@
                         document.querySelector('input[name="pressure_drop_dry"]').value = extractValue(text, "Pressure drop air, dry coil");
                         document.querySelector('input[name="air_temp"]').value = extractValue(text, "Air temperature before/after");
                         document.querySelector('input[name="cooling_capacity"]').value = extractValue(text, "Total cooling capacity");
-                        document.querySelector('input[name="sensible_cooling"]').value = extractValue(text, "Sensible cooling");
+                        document.querySelector('input[name="sensible_cooling"]').value = extractValue(text, "Sensible cooling in % of total cooling");
                         document.querySelector('input[name="face_velocity"]').value = extractValue(text, "Face velocity");
                         document.querySelector('input[name="condensate"]').value = extractValue(text, "Condensate");
                         document.querySelector('input[name="fluid_type"]').value = extractValue(text, "Fluid type");
@@ -102,7 +102,7 @@
         });
 
         function extractValue(text, fieldName) {
-            const regex = new RegExp(`${fieldName}\\s*([\\d.]+)`);
+            const regex = new RegExp(`${fieldName}\\s*:\\s*([\\d.]+|[A-Za-z\\s]+)`);
             const match = text.match(regex);
             return match ? match[1].trim() : '';
         }
