@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>DX Coil Tool - OCR Data Extraction</h1>
-    <p>Upload an image and click "Import Data" to fill in the form fields:</p>
+    <p>Upload an image, paste an image, or click "Import Data" to fill in the form fields:</p>
 
     <input type="file" id="imageInput" accept="image/*"><br><br>
     <button id="importButton">Import Data</button><br><br>
@@ -64,6 +64,25 @@
             reader.readAsDataURL(imageFile);
         });
 
+        // Paste event listener for pasting images from clipboard
+        document.addEventListener('paste', function(event) {
+            const items = event.clipboardData.items;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    const blob = items[i].getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        img.src = e.target.result;
+                        imgSrc = img.src;
+                        outputDiv.innerHTML = '';  // Clear previous image
+                        outputDiv.appendChild(img);
+                    };
+                    reader.readAsDataURL(blob);
+                }
+            }
+        });
+
         importButton.addEventListener('click', function() {
             if (imgSrc) {
                 Tesseract.recognize(imgSrc, 'eng', { logger: m => console.log(m) })
@@ -97,7 +116,7 @@
                         document.querySelector('input[name="water_trap"]').value = extractValue(text, "Water trap");
                     });
             } else {
-                alert('Please upload an image first.');
+                alert('Please upload or paste an image first.');
             }
         });
 
