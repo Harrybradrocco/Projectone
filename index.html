@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DX Coil Tool - OCR</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2"></script>
+</head>
+<body>
+    <h1>DX Coil Tool - OCR Data Extraction</h1>
+    <p>Upload an image and click "Import Data" to fill in the form fields:</p>
+
+    <input type="file" id="imageInput" accept="image/*"><br><br>
+    <button id="importButton">Import Data</button><br><br>
+    <div id="output"></div>
+
+    <form>
+        <label>Airflow: <input type="text" name="airflow"></label><br><br>
+        <label>Capacity: <input type="text" name="capacity"></label><br><br>
+    </form>
+
+    <script>
+        let imgSrc = '';
+        const imageInput = document.getElementById('imageInput');
+        const importButton = document.getElementById('importButton');
+        const outputDiv = document.getElementById('output');
+
+        imageInput.addEventListener('change', function(event) {
+            const imageFile = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                imgSrc = img.src;
+                outputDiv.innerHTML = '';  // Clear previous image
+                outputDiv.appendChild(img);
+            };
+
+            reader.readAsDataURL(imageFile);
+        });
+
+        importButton.addEventListener('click', function() {
+            if (imgSrc) {
+                Tesseract.recognize(imgSrc, 'eng', { logger: m => console.log(m) })
+                    .then(({ data: { text } }) => {
+                        console.log(text);
+                        document.querySelector('input[name="airflow"]').value = extractAirflow(text);
+                        document.querySelector('input[name="capacity"]').value = extractCapacity(text);
+                    });
+            } else {
+                alert('Please upload an image first.');
+            }
+        });
+
+        function extractAirflow(text) {
+            const airflowMatch = text.match(/Airflow: (\d+)/);
+            return airflowMatch ? airflowMatch[1] : '';
+        }
+
+        function extractCapacity(text) {
+            const capacityMatch = text.match(/Capacity: (\d+)/);
+            return capacityMatch ? capacityMatch[1] : '';
+        }
+    </script>
+</body>
+</html>
