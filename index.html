@@ -15,32 +15,32 @@
     <div id="output"></div>
 
     <form>
-        <label>Airflow (CFM): <input type="text" name="airflow"></label><br><br>
-        <label>Pressure drop air, wet coil (in wc): <input type="text" name="pressure_drop_wet"></label><br><br>
-        <label>Pressure drop air, dry coil (in wc): <input type="text" name="pressure_drop_dry"></label><br><br>
-        <label>Air temperature before/after (°F): <input type="text" name="air_temp"></label><br><br>
-        <label>Total cooling capacity (BTU/hr): <input type="text" name="cooling_capacity"></label><br><br>
-        <label>Sensible cooling (%): <input type="text" name="sensible_cooling"></label><br><br>
-        <label>Face velocity (ft/min): <input type="text" name="face_velocity"></label><br><br>
-        <label>Condensate (GPM): <input type="text" name="condensate"></label><br><br>
+        <label>Airflow: <input type="text" name="airflow"></label><br><br>
+        <label>Pressure drop air, wet coil: <input type="text" name="pressure_drop_wet"></label><br><br>
+        <label>Pressure drop air, dry coil: <input type="text" name="pressure_drop_dry"></label><br><br>
+        <label>Air temperature before/after: <input type="text" name="air_temp"></label><br><br>
+        <label>Total cooling capacity: <input type="text" name="cooling_capacity"></label><br><br>
+        <label>Sensible cooling: <input type="text" name="sensible_cooling"></label><br><br>
+        <label>Face velocity: <input type="text" name="face_velocity"></label><br><br>
+        <label>Condensate: <input type="text" name="condensate"></label><br><br>
         <label>Fluid type: <input type="text" name="fluid_type"></label><br><br>
-        <label>Fluid temp in/out (°F): <input type="text" name="fluid_temp"></label><br><br>
-        <label>Fluid flow rate (GPM): <input type="text" name="fluid_flow_rate"></label><br><br>
-        <label>Fluid pressure drop (psi): <input type="text" name="fluid_pressure_drop"></label><br><br>
-        <label>Fluid velocity (ft/s): <input type="text" name="fluid_velocity"></label><br><br>
-        <label>Coil volume (ft³): <input type="text" name="coil_volume"></label><br><br>
-        <label>Valve size (KvS): <input type="text" name="valve_size"></label><br><br>
+        <label>Fluid temperature inlet/outlet: <input type="text" name="fluid_temp"></label><br><br>
+        <label>Fluid flow rate: <input type="text" name="fluid_flow_rate"></label><br><br>
+        <label>Fluid pressure drop: <input type="text" name="fluid_pressure_drop"></label><br><br>
+        <label>Fluid velocity: <input type="text" name="fluid_velocity"></label><br><br>
+        <label>Coil volume: <input type="text" name="coil_volume"></label><br><br>
+        <label>Recommended valve size: <input type="text" name="valve_size"></label><br><br>
         <label>Connection side: <input type="text" name="connection_side"></label><br><br>
         <label>Connection size inlet/outlet: <input type="text" name="connection_size"></label><br><br>
         <label>Tube material: <input type="text" name="tube_material"></label><br><br>
         <label>Fin material: <input type="text" name="fin_material"></label><br><br>
-        <label>Fin thickness (in): <input type="text" name="fin_thickness"></label><br><br>
-        <label>Fin spacing (FPI): <input type="text" name="fin_spacing"></label><br><br>
+        <label>Fin thickness: <input type="text" name="fin_thickness"></label><br><br>
+        <label>Fin spacing: <input type="text" name="fin_spacing"></label><br><br>
         <label>No. of rows: <input type="text" name="rows"></label><br><br>
         <label>Drip tray material: <input type="text" name="drip_tray_material"></label><br><br>
-        <label>Pipe diameter from drip tray (in): <input type="text" name="pipe_diameter"></label><br><br>
+        <label>Diameter of pipe from drip tray: <input type="text" name="pipe_diameter"></label><br><br>
         <label>Coil code: <input type="text" name="coil_code"></label><br><br>
-        <label>Water trap (pcs): <input type="text" name="water_trap"></label><br><br>
+        <label>Water trap: <input type="text" name="water_trap"></label><br><br>
     </form>
 
     <script>
@@ -102,7 +102,7 @@
         });
 
         function extractValue(text, fieldName) {
-            const regex = new RegExp(`${fieldName}\\s*(.*)`);
+            const regex = new RegExp(`${fieldName}\\s*([\\d.]+)`);
             const match = text.match(regex);
             return match ? match[1].trim() : '';
         }
