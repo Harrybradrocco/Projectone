@@ -19,8 +19,9 @@
         <label>Pressure drop air, wet coil: <input type="text" name="pressure_drop_wet"></label><br><br>
         <label>Pressure drop air, dry coil: <input type="text" name="pressure_drop_dry"></label><br><br>
         <label>Air temperature before/after: <input type="text" name="air_temp"></label><br><br>
+        <label>Wet bulb temperature before/after: <input type="text" name="wet_bulb_temp"></label><br><br>
         <label>Total cooling capacity: <input type="text" name="cooling_capacity"></label><br><br>
-        <label>Sensible cooling: <input type="text" name="sensible_cooling"></label><br><br>
+        <label>Sensible cooling (% of total cooling): <input type="text" name="sensible_cooling"></label><br><br>
         <label>Face velocity: <input type="text" name="face_velocity"></label><br><br>
         <label>Condensate: <input type="text" name="condensate"></label><br><br>
         <label>Fluid type: <input type="text" name="fluid_type"></label><br><br>
@@ -72,13 +73,14 @@
                         document.querySelector('input[name="airflow"]').value = extractValue(text, "Air flow");
                         document.querySelector('input[name="pressure_drop_wet"]').value = extractValue(text, "Pressure drop air, wet coil");
                         document.querySelector('input[name="pressure_drop_dry"]').value = extractValue(text, "Pressure drop air, dry coil");
-                        document.querySelector('input[name="air_temp"]').value = extractValue(text, "Air temperature before/after");
+                        document.querySelector('input[name="air_temp"]').value = extractTemp(text, "Air temperature before/after");
+                        document.querySelector('input[name="wet_bulb_temp"]').value = extractTemp(text, "Wet bulb temperature before/after");
                         document.querySelector('input[name="cooling_capacity"]').value = extractValue(text, "Total cooling capacity");
                         document.querySelector('input[name="sensible_cooling"]').value = extractValue(text, "Sensible cooling in % of total cooling");
                         document.querySelector('input[name="face_velocity"]').value = extractValue(text, "Face velocity");
                         document.querySelector('input[name="condensate"]').value = extractValue(text, "Condensate");
                         document.querySelector('input[name="fluid_type"]').value = extractValue(text, "Fluid type");
-                        document.querySelector('input[name="fluid_temp"]').value = extractValue(text, "Fluid temperature inlet/outlet");
+                        document.querySelector('input[name="fluid_temp"]').value = extractTemp(text, "Fluid temperature inlet/outlet");
                         document.querySelector('input[name="fluid_flow_rate"]').value = extractValue(text, "Fluid flow rate");
                         document.querySelector('input[name="fluid_pressure_drop"]').value = extractValue(text, "Fluid pressure drop");
                         document.querySelector('input[name="fluid_velocity"]').value = extractValue(text, "Fluid velocity");
@@ -102,9 +104,15 @@
         });
 
         function extractValue(text, fieldName) {
-            const regex = new RegExp(`${fieldName}\\s*:\\s*([\\d.]+|[A-Za-z\\s]+)`);
+            const regex = new RegExp(`${fieldName}\\s*:\\s*([\\d.]+|[A-Za-z\\s/]+)`);
             const match = text.match(regex);
             return match ? match[1].trim() : '';
+        }
+
+        function extractTemp(text, fieldName) {
+            const regex = new RegExp(`${fieldName}\\s*:\\s*([\\d.]+)/([\\d.]+)`);
+            const match = text.match(regex);
+            return match ? match[1].trim() + '/' + match[2].trim() : '';
         }
     </script>
 </body>
